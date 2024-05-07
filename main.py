@@ -12,6 +12,13 @@ import plotly.figure_factory as ff
 import plotly.express as px
 import plotly.graph_objects as go
 
+css='''
+<style>
+    section.main > div {max-width: 80%;}
+</style>
+'''
+st.markdown(css, unsafe_allow_html=True)
+
 @st.cache_data
 def load_data(url, user, password):
     df = pd.read_csv(url, storage_options={"Authorization": b"Basic " + base64.b64encode(f"{user}:{password}".encode())})
@@ -201,7 +208,7 @@ class App:
         self._tab3.empty()
         with self._tab3:
             df = self._get_filtered_data()
-            st.dataframe(df)
+            st.dataframe(df, height=600)
 
     def _get_filtered_data(self):
         df = self._caliper_measurements
@@ -234,14 +241,14 @@ class App:
                                          legendgroup=group, legendgrouptitle_text=group.capitalize()))
 
         fig.update_layout(
-            width=800, height=600,
+            height=600,
             title='Tumor Volume vs Time for All Subjects',
             xaxis_title='Time (days)',
             yaxis_title='Tumor Volume (mm^3)',
             legend_title='Subjects',
         )
 
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
 
     def _plot_box_plot(self):
         df = self._get_filtered_data()
@@ -255,13 +262,14 @@ class App:
 
         # update fig size
         self._fig_2.update_layout(
+            height=600,
             xaxis_title='Time (days)',
             yaxis_title='Tumor Volume (mm^3)',
             legend_title='Group',
         )
 
-        st.plotly_chart(self._fig_2)
+        st.plotly_chart(self._fig_2, use_container_width=True)
 
     
-app = App()
+app = App("https://xnat.pixi.org", "andrewl", "monarch2024$$", "TestProject")
 
