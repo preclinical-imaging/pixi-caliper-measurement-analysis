@@ -269,7 +269,3 @@ class App:
         )
 
         st.plotly_chart(self._fig_2, use_container_width=True)
-
-    
-app = App("https://xnat.pixi.org", "andrewl", "monarch2024$$", "TestProject")
-
